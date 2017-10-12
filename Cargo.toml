@@ -1,0 +1,8 @@
+[package]
+name = "alphred"
+version = "0.1.0"
+authors = ["Alpha Chen <alpha.chen@gmail.com>"]
+
+[dependencies]
+serde = "1.0"
+serde_derive = "1.0"
