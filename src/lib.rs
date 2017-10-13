@@ -10,23 +10,40 @@ pub struct Item {
     subtitle: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     arg: Option<String>,
-    icon: Icon,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    icon: Option<Icon>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    valid: Option<bool>,
 }
 
 impl Item {
-    pub fn new(title: String, icon: Icon) -> Self {
-        let subtitle = None;
-        let arg = None;
-        Item { title, subtitle, arg, icon }
+    pub fn new(title: String) -> Self {
+        Item {
+            title: title,
+            subtitle: None,
+            arg: None,
+            icon: None,
+            valid: None,
+        }
     }
 
-    pub fn subtitle<'a>(&'a mut self, subtitle: &str) -> &'a mut Self {
+    pub fn subtitle(mut self, subtitle: &str) -> Self {
         self.subtitle = Some(subtitle.into());
         self
     }
 
-    pub fn arg<'a>(&'a mut self, arg: &str) -> &'a mut Self {
+    pub fn arg(mut self, arg: &str) -> Self {
         self.arg = Some(arg.into());
+        self
+    }
+
+    pub fn icon(mut self, icon: Icon) -> Self {
+        self.icon = Some(icon);
+        self
+    }
+
+    pub fn valid(mut self, valid: bool) -> Self {
+        self.valid = Some(valid);
         self
     }
 }
