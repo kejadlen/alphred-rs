@@ -37,8 +37,8 @@ impl Item {
         self
     }
 
-    pub fn icon(mut self, icon: Icon) -> Self {
-        self.icon = Some(icon);
+    pub fn icon<I: Into<Icon>>(mut self, icon: I) -> Self {
+        self.icon = Some(icon.into());
         self
     }
 
@@ -51,4 +51,11 @@ impl Item {
 #[derive(Debug, Serialize)]
 pub struct Icon {
     pub path: PathBuf,
+}
+
+impl<'a> From<&'a str> for Icon {
+    fn from(s: &str) -> Self {
+        let path = s.into();
+        Self { path }
+    }
 }
