@@ -17,9 +17,9 @@ pub struct Item {
 }
 
 impl Item {
-    pub fn new(title: String) -> Self {
+    pub fn new<S: Into<String>>(title: S) -> Self {
         Item {
-            title: title,
+            title: title.into(),
             subtitle: None,
             arg: None,
             icon: None,
