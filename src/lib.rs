@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate serde_derive;
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 #[derive(Debug, Serialize)]
 pub struct Item {
@@ -56,6 +56,13 @@ pub struct Icon {
 impl<'a> From<&'a str> for Icon {
     fn from(s: &str) -> Self {
         let path = s.into();
+        Self { path }
+    }
+}
+
+impl<'a> From<&'a Path> for Icon {
+    fn from(p: &Path) -> Self {
+        let path = p.into();
         Self { path }
     }
 }
