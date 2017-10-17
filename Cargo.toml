@@ -2,6 +2,11 @@
 name = "alphred"
 version = "0.1.0"
 authors = ["Alpha Chen <alpha.chen@gmail.com>"]
+description = "Make Alfred workflows easier"
+documentation = "https://docs.rs/alphred"
+homepage = "https://github.com/kejadlen/alphred-rs"
+repository = "https://github.com/kejadlen/alphred-rs"
+license = "MIT"
 
 [dependencies]
 serde = "1.0"
