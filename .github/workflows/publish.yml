@@ -1,0 +1,28 @@
+name: publish
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions-rs/cargo@v1
+      with:
+        command: test
+    - uses: actions-rs/cargo@v1
+      with:
+        command: login
+        args: ${{ env.CARGO_TOKEN }}
+    - uses: actions-rs/cargo@v1
+      with:
+        command: publish
+        args: --dry-run
+    - uses: actions-rs/cargo@v1
+      with:
+        command: publish
