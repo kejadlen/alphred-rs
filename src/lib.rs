@@ -1,7 +1,14 @@
 #[macro_use]
 extern crate serde_derive;
 
+use std::env;
 use std::path::{Path, PathBuf};
+
+use anyhow::Result;
+
+pub fn workflow_cache() -> Result<PathBuf> {
+    Ok(PathBuf::from(env::var("alfred_workflow_cache")?))
+}
 
 #[derive(Debug, Serialize)]
 pub struct Item {
