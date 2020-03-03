@@ -2,8 +2,6 @@ name: publish
 
 on:
   push:
-    branches:
-      - master
     tags:
       - v*
 
@@ -18,7 +16,7 @@ jobs:
     - uses: actions-rs/cargo@v1
       with:
         command: login
-        args: ${{ env.CARGO_TOKEN }}
+        args: ${{ secrets.CargoToken }}
     - uses: actions-rs/cargo@v1
       with:
         command: publish
