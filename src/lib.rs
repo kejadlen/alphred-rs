@@ -1,13 +1,32 @@
-#[macro_use]
-extern crate serde_derive;
-
 use std::env;
+use std::fs;
 use std::path::{Path, PathBuf};
+use std::string::ToString;
 
 use anyhow::Result;
+use serde::{Serialize};
+use serde_json::json;
 
-pub fn workflow_cache() -> Result<PathBuf> {
-    Ok(PathBuf::from(env::var("alfred_workflow_cache")?))
+#[derive(Debug, Serialize)]
+pub struct Workflow {
+    items: Vec<Item>,
+}
+
+impl Workflow {
+    pub fn cache() -> Result<PathBuf> {
+        let var = env::var("alfred_workflow_cache")?;
+        let path = PathBuf::from(var);
+        if !path.exists() {
+            fs::create_dir(&path)?;
+        }
+        Ok(path)
+    }
+}
+
+impl ToString for Workflow {
+    fn to_string(&self) -> String {
+        json!({ "items": self.items }).to_string()
+    }
 }
 
 #[derive(Debug, Serialize)]
