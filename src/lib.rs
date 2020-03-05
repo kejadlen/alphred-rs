@@ -1,13 +1,13 @@
 use std::env;
+use std::fmt;
 use std::fs;
 use std::path::{Path, PathBuf};
-use std::string::ToString;
 
 use anyhow::Result;
 use serde::{Serialize};
 use serde_json::json;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
 pub struct Workflow {
     items: Vec<Item>,
 }
@@ -27,9 +27,9 @@ impl Workflow {
     }
 }
 
-impl ToString for Workflow {
-    fn to_string(&self) -> String {
-        json!({ "items": self.items }).to_string()
+impl fmt::Display for Workflow {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", json!({ "items": self.items }).to_string())
     }
 }
 
