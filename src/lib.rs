@@ -21,6 +21,10 @@ impl Workflow {
         }
         Ok(path)
     }
+
+    pub fn new(items: &[Item]) -> Self {
+        Self { items: items.to_vec() }
+    }
 }
 
 impl ToString for Workflow {
@@ -29,7 +33,7 @@ impl ToString for Workflow {
     }
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct Item {
     title: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -74,7 +78,7 @@ impl Item {
     }
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct Icon {
     pub path: PathBuf,
 }
