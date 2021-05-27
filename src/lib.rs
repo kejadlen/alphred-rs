@@ -5,7 +5,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use anyhow::Result;
-use serde::{Serialize};
+use serde::Serialize;
 use serde_json::json;
 
 #[derive(Debug)]
@@ -24,7 +24,9 @@ impl Workflow {
     }
 
     pub fn new(items: &[Item]) -> Self {
-        Self { items: items.to_vec() }
+        Self {
+            items: items.to_vec(),
+        }
     }
 }
 
@@ -81,8 +83,13 @@ impl Item {
         self
     }
 
-    pub fn variables(mut self, variables: &HashMap<String, String>) -> Self {
-        self.variables = Some(variables.clone());
+    pub fn variables(mut self, variables: &HashMap<&str, &str>) -> Self {
+        self.variables = Some(
+            variables
+                .iter()
+                .map(|(&k, &v)| (k.into(), v.into()))
+                .collect(),
+        );
         self
     }
 }
