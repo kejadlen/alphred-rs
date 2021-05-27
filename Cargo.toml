@@ -1,6 +1,6 @@
 [package]
 name = "alphred"
-version = "0.1.4"
+version = "0.1.5"
 authors = ["Alpha Chen <alpha.chen@gmail.com>"]
 description = "Make Alfred workflows easier"
 documentation = "https://docs.rs/alphred"
@@ -12,5 +12,4 @@ edition = "2018"
 [dependencies]
 anyhow = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-serde_derive = "1.0"
 serde_json = "1.0"

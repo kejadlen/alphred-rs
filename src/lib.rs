@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::env;
 use std::fmt;
 use std::fs;
@@ -44,6 +45,8 @@ pub struct Item {
     icon: Option<Icon>,
     #[serde(skip_serializing_if = "Option::is_none")]
     valid: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    variables: Option<HashMap<String, String>>,
 }
 
 impl Item {
@@ -54,6 +57,7 @@ impl Item {
             arg: None,
             icon: None,
             valid: None,
+            variables: None,
         }
     }
 
@@ -74,6 +78,11 @@ impl Item {
 
     pub fn valid(mut self, valid: bool) -> Self {
         self.valid = Some(valid);
+        self
+    }
+
+    pub fn variables(mut self, variables: HashMap<String, String>) -> Self {
+        self.variables = Some(variables);
         self
     }
 }
