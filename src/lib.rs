@@ -81,8 +81,8 @@ impl Item {
         self
     }
 
-    pub fn variables(mut self, variables: HashMap<String, String>) -> Self {
-        self.variables = Some(variables);
+    pub fn variables(mut self, variables: &HashMap<String, String>) -> Self {
+        self.variables = Some(variables.clone());
         self
     }
 }
