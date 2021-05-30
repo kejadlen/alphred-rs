@@ -83,16 +83,8 @@ impl Item {
         self
     }
 
-    pub fn variables<'a>(
-        mut self,
-        variables: impl IntoIterator<Item = &'a (&'a str, &'a str)>,
-    ) -> Self {
-        self.variables = Some(
-            variables
-                .into_iter()
-                .map(|(k, v)| (k.to_string(), v.to_string()))
-                .collect(),
-        );
+    pub fn variables(mut self, variables: HashMap<String, String>) -> Self {
+        self.variables = Some(variables);
         self
     }
 }
