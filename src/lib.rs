@@ -38,6 +38,8 @@ impl fmt::Display for Workflow {
 
 #[derive(Clone, Debug, Serialize)]
 pub struct Item {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    uid: Option<String>,
     title: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     subtitle: Option<String>,
@@ -54,6 +56,7 @@ pub struct Item {
 impl Item {
     pub fn new<S: Into<String>>(title: S) -> Self {
         Item {
+            uid: None,
             title: title.into(),
             subtitle: None,
             arg: None,
@@ -61,6 +64,11 @@ impl Item {
             valid: None,
             variables: None,
         }
+    }
+
+    pub fn uid(mut self, uid: &str) -> Self {
+        self.uid = Some(uid.into());
+        self
     }
 
     pub fn subtitle(mut self, subtitle: &str) -> Self {
