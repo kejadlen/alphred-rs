@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::env;
 use std::fmt;
 use std::fs;
+use std::io::Write;
 use std::path::{Path, PathBuf};
 
 use anyhow::Result;
@@ -14,25 +15,28 @@ pub struct Workflow {
 }
 
 impl Workflow {
-    pub fn cache() -> Result<PathBuf> {
-        let var = env::var("alfred_workflow_cache")?;
-        let path = PathBuf::from(var);
-        if !path.exists() {
-            fs::create_dir(&path)?;
-        }
-        Ok(path)
-    }
+    pub fn new<F>(f: F) -> Self
+    where
+        F: Fn() -> Result<Vec<Item>>,
+    {
+        let items = f().unwrap_or_else(|err| {
+            let mut items: Vec<_> = err
+                .chain()
+                .map(|cause| Item::new(cause.to_string()))
+                .collect();
+            if let Ok(error_icon) = error_icon() {
+                items[0].icon = Some(error_icon);
+            }
+            items
+        });
 
-    pub fn new(items: &[Item]) -> Self {
-        Self {
-            items: items.to_vec(),
-        }
+        Workflow { items }
     }
 }
 
 impl fmt::Display for Workflow {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", json!({ "items": self.items }).to_string())
+        write!(f, "{}", json!({ "items": self.items }))
     }
 }
 
@@ -114,4 +118,35 @@ impl<'a> From<&'a Path> for Icon {
         let path = p.into();
         Self { path }
     }
+}
+
+fn cache_path() -> Result<PathBuf> {
+    let var = env::var("alfred_workflow_cache")?;
+    let path = PathBuf::from(var);
+    if !path.exists() {
+        fs::create_dir_all(&path)?;
+    }
+    Ok(path)
+}
+
+pub fn cached<F>(file_name: &str, f: F) -> Result<PathBuf>
+where
+    F: Fn() -> Result<Vec<u8>>,
+{
+    let file_path = cache_path()?.join(file_name);
+    if file_path.exists() {
+        return Ok(file_path);
+    }
+
+    let data = f()?;
+    let mut file = fs::File::create(file_path.clone())?;
+    file.write_all(&data)?;
+    Ok(file_path)
+}
+
+fn error_icon() -> Result<Icon> {
+    let error_png = include_bytes!("error.png");
+
+    let path_buf = cached(".alphred.error", || Ok(error_png.to_vec()))?;
+    Ok(path_buf.as_path().into())
 }
