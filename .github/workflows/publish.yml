@@ -10,16 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: cargo test
-      uses: actions-rs/cargo@v1
-      with:
-        command: test
-    - name: cargo login
-      uses: actions-rs/cargo@v1
-      with:
-        command: login
-        args: ${{ secrets.CargoToken }}
-    - name: cargo publish
-      uses: actions-rs/cargo@v1
-      with:
-        command: publish
+    - name: Test
+      run: cargo test --verbose
+    - name: Login
+      run: cargo login
+      env:
+        CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+    - name: Publish
+      run: cargo publish
